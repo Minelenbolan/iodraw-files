@@ -1,0 +1,146 @@
+<mxfile host="app.diagrams.net" modified="2024-05-09T00:00:00.000Z" agent="Gemini-Custom" version="21.0.0" type="device">
+  <diagram id="thesis-flow" name="系统逻辑流程图">
+    <mxGraphModel dx="1422" dy="2000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 开始 -->
+        <mxCell id="start" value="开始" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="374" y="20" width="80" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 数据加载 -->
+        <mxCell id="step1" value="用户选择载体图&lt;br/&gt;load_cover_image()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="344" y="90" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="start" target="step1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 选择操作类型 -->
+        <mxCell id="decide_op" value="选择操作类型" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="170" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="step1" target="decide_op">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ============ 嵌入流程左半部分 ============ -->
+        <mxCell id="group_embed" value="嵌入流程 on_embed()" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f0f3ff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="360" height="680" as="geometry" />
+        </mxCell>
+
+        <mxCell id="check_cover" value="cover_path&lt;br/&gt;是否为空?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="115" y="40" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alert_embed" value="弹出警告：&lt;br/&gt;请先选择载体图" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="group_embed">
+          <mxGeometry x="250" y="45" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="select_embed_method" value="读取隐写方式&lt;br/&gt;method_combo" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="110" y="140" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="embed_lsb" value="LSB" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="group_embed">
+          <mxGeometry x="50" y="155" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="embed_dwt" value="DWT(QIM)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="group_embed">
+          <mxGeometry x="100" y="210" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="embed_hidden" value="HiDDeN" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="group_embed">
+          <mxGeometry x="200" y="210" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="embed_rsgan" value="RS-GAN" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="group_embed">
+          <mxGeometry x="270" y="155" width="70" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_lsb" value="LSBstego.embed()&lt;br/&gt;cover + text → stego.png" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="10" y="260" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_dwt" value="embed_dwt_qim()&lt;br/&gt;DWT变换→QIM量化嵌入" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="10" y="330" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_hidden" value="encoder()&lt;br/&gt;Cover + Secret灰度图&lt;br/&gt;双分支编码 → stego.png" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="200" y="260" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_rsgan" value="rs_stego.encode()&lt;br/&gt;Generator残差生成&lt;br/&gt;→ stego.png" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="200" y="340" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="calc_embed_metrics" value="计算嵌入质量指标&lt;br/&gt;calc_image_metrics()&lt;br/&gt;PSNR / SSIM" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_embed">
+          <mxGeometry x="85" y="470" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="update_embed_ui" value="更新界面显示&lt;br/&gt;① 含密图预览 → stego_box&lt;br/&gt;② 指标面板 → PSNR / SSIM" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1f5fe;" vertex="1" parent="group_embed">
+          <mxGeometry x="85" y="560" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ============ 提取流程右半部分 ============ -->
+        <mxCell id="group_extract" value="提取流程 on_extract()" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f9f7ed;strokeColor=#ae9043;" vertex="1" parent="1">
+          <mxGeometry x="420" y="280" width="360" height="680" as="geometry" />
+        </mxCell>
+
+        <mxCell id="check_stego" value="stego_path&lt;br/&gt;是否为空?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="group_extract">
+          <mxGeometry x="115" y="40" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="select_extract_method" value="读取隐写方式&lt;br/&gt;method_combo" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="group_extract">
+          <mxGeometry x="110" y="140" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_ex_rsgan" value="rs_stego.decode()&lt;br/&gt;stego → 4层CNN&lt;br/&gt;→ 恢复文本" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_extract">
+          <mxGeometry x="20" y="260" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_ex_dwt" value="extract_dwt_qim()&lt;br/&gt;读取QIM量化值&lt;br/&gt;→ 恢复文本/图" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_extract">
+          <mxGeometry x="115" y="340" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exec_ex_hidden" value="decoder()&lt;br/&gt;stego → 7层卷积网络&lt;br/&gt;→ recovered.png" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_extract">
+          <mxGeometry x="210" y="260" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="calc_ex_metrics" value="数据提取指标计算&lt;br/&gt;calc_text_metrics() / image_metrics()&lt;br/&gt;Accuracy / BER / PSNR" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="group_extract">
+          <mxGeometry x="70" y="470" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="update_ex_ui" value="更新界面显示&lt;br/&gt;① 提取文本/图像显示&lt;br/&gt;② 指标面板显示 BER/Acc等" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1f5fe;" vertex="1" parent="group_extract">
+          <mxGeometry x="70" y="560" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 结束 -->
+        <mxCell id="end" value="结束" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="374" y="1020" width="80" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 汇总连线 -->
+        <mxCell id="e_to_end1" edge="1" parent="1" source="update_embed_ui" target="end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="215" y="1000" /><mxPoint x="414" y="1000" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_to_end2" edge="1" parent="1" source="update_ex_ui" target="end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="600" y="1000" /><mxPoint x="414" y="1000" /></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 分支连线示例 -->
+        <mxCell id="ep1" edge="1" parent="1" source="decide_op" target="check_cover">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="205" y="210"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="ep2" edge="1" parent="1" source="decide_op" target="check_stego">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="605" y="210"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="ep3" edge="1" parent="1" source="check_cover" target="select_embed_method">
+            <mxGeometry relative="1" as="geometry"><mxPoint as="offset" value="-20" /><mxCell value="否" style="text;html=1;" vertex="1" connectable="0"/></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
