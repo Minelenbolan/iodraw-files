@@ -1,0 +1,135 @@
+<mxfile host="app.diagrams.net" modified="2024-05-09T00:00:00.000Z" agent="Gemini" version="21.0.0" type="device">
+  <diagram id="thesis-arch" name="系统技术架构图">
+    <mxGraphModel dx="1422" dy="2000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 背景层级框 -->
+        <mxCell id="layer_user" value="用户端" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="600" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="layer_app" value="应用业务层 (window.py)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#e1f5fe;strokeColor=#01579b;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="160" width="600" height="240" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer_algo" value="算法引擎层" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f3e5f5;strokeColor=#4a148c;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="420" width="600" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer_framework" value="核心框架层" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#e8f5e9;strokeColor=#1b5e20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="620" width="600" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer_env" value="运行与操作系统层" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#fff3e0;strokeColor=#e65100;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="760" width="600" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- 数据存储层 (左侧) -->
+        <mxCell id="layer_data" value="数据存储层 (本地文件系统)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f9f7ed;strokeColor=#ae9043;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="160" width="200" height="600" as="geometry" />
+        </mxCell>
+
+        <!-- 硬件平台层 (右侧) -->
+        <mxCell id="layer_hw" value="硬件支撑层" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#eceff1;strokeColor=#455a64;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="860" y="160" width="220" height="740" as="geometry" />
+        </mxCell>
+
+        <!-- 用户端内容 -->
+        <mxCell id="u1" value="用户操作：&lt;br/&gt;鼠标点击 / 键盘输入" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="layer_user">
+          <mxGeometry x="200" y="40" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 应用逻辑内容 -->
+        <mxCell id="app_ui" value="界面模块 (StegoMainWindow)&lt;br/&gt;PyQt5 主窗口 / 布局管理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_app">
+          <mxGeometry x="100" y="40" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="app_router" value="逻辑调度模块&lt;br/&gt;on_embed() / on_extract() 算法路由调度器" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_app">
+          <mxGeometry x="50" y="110" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="app_metrics" value="评价指标引擎&lt;br/&gt;calc_image_metrics() / calc_text_metrics()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_app">
+          <mxGeometry x="320" y="110" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 算法引擎内容 -->
+        <mxCell id="al1" value="RS-GAN 模块&lt;br/&gt;.encode() / .decode()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_algo">
+          <mxGeometry x="20" y="40" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="al2" value="DWT 模块&lt;br/&gt;DWT_QIM 频率隐写" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_algo">
+          <mxGeometry x="160" y="40" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="al3" value="HiDDeN 模块&lt;br/&gt;Inference Encoder/Decoder" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_algo">
+          <mxGeometry x="305" y="40" width="145" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="al4" value="LSB 模块&lt;br/&gt;空域隐写 LSB_word" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_algo">
+          <mxGeometry x="465" y="40" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 框架层内容 -->
+        <mxCell id="fr1" value="PyTorch 2.4.1&lt;br/&gt;矩阵运算 / 模型前向传播" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_framework">
+          <mxGeometry x="20" y="40" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fr2" value="NumPy / OpenCV&lt;br/&gt;图像编解码 &amp; 预处理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_framework">
+          <mxGeometry x="175" y="40" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fr3" value="Pillow (PIL)&lt;br/&gt;格式转换 / 灰度处理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_framework">
+          <mxGeometry x="330" y="40" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fr4" value="Scikit-image&lt;br/&gt;指标计算 SSIM/PSNR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_framework">
+          <mxGeometry x="465" y="40" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 环境层内容 -->
+        <mxCell id="en1" value="运行环境: Python 3.9 + Anaconda3 虚拟环境" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="layer_env">
+          <mxGeometry x="100" y="40" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="en2" value="操作系统: Windows 11 (文件管理/进程调度)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="layer_env">
+          <mxGeometry x="100" y="85" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 存储层具体内容 -->
+        <mxCell id="da1" value="输入素材&lt;br/&gt;cover.png / secret.png" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;" vertex="1" parent="layer_data">
+          <mxGeometry x="40" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="da2" value="预训练权重 (.pth)&lt;br/&gt;RS-GAN / HiDDeN" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;" vertex="1" parent="layer_data">
+          <mxGeometry x="40" y="140" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="da3" value="输出结果&lt;br/&gt;stego.png / recovered.png" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;" vertex="1" parent="layer_data">
+          <mxGeometry x="40" y="260" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- 硬件具体内容 -->
+        <mxCell id="hw1" value="CPU: AMD Ryzen 7 5800H&lt;br/&gt;8核16线程 @ 3.20GHz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_hw">
+          <mxGeometry x="20" y="40" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hw2" value="GPU: AMD Radeon Graphics&lt;br/&gt;2GB 专用显存" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_hw">
+          <mxGeometry x="20" y="110" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hw3" value="RAM: 16GB DDR4 3200MT/s" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_hw">
+          <mxGeometry x="20" y="180" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="hw4" value="磁盘 I/O&lt;br/&gt;本地文件系统读写" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="layer_hw">
+          <mxGeometry x="20" y="240" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 数据流向联系线条 -->
+        <mxCell id="edge1" value="交互事件/GUI渲染" style="curved=1;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeWidth=1;" edge="1" parent="1" source="u1" target="app_ui">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="调用算法" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="app_router" target="layer_algo">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="返回指标" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.75;entryY=1;" edge="1" parent="1" source="app_metrics" target="app_ui">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" value="读取素材/解析权重" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;exitX=1;exitY=0.5;" edge="1" parent="1" source="layer_data" target="layer_algo">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" value="硬件驱动" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;exitX=0;exitY=0.8;" edge="1" parent="1" source="layer_hw" target="layer_env">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
