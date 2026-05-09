@@ -1,0 +1,118 @@
+<mxfile host="app.diagrams.net" modified="2024-05-09T00:00:00.000Z" agent="Gemini" version="21.0.0" type="device">
+  <diagram id="model-architecture" name="模型系统架构图">
+    <mxGraphModel dx="2000" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- === RS-GAN 模型区域 === -->
+        <mxCell id="rsgan_container" value="RS-GAN 模型架构 (单输入拼接)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#444444;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="560" height="1060" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rs_input_c" value="&lt;b&gt;Cover Image&lt;/b&gt;&lt;br/&gt;[N, 3, H, W]&lt;br/&gt;RGB 彩色图" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="rsgan_container">
+          <mxGeometry x="40" y="60" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rs_input_s" value="&lt;b&gt;Secret Bits&lt;/b&gt;&lt;br/&gt;[N, 1, H, W]&lt;br/&gt;二进制比特平面" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="rsgan_container">
+          <mxGeometry x="220" y="60" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rs_concat" value="Concat 拼接&lt;br/&gt;[N, 4, H, W]" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f5f5f5;" vertex="1" parent="rsgan_container">
+          <mxGeometry x="130" y="150" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 生成器子框 -->
+        <mxCell id="rs_enc_box" value="生成器 StegoEncoder" style="swimlane;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;startSize=23;" vertex="1" parent="rsgan_container">
+          <mxGeometry x="30" y="220" width="340" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="rs_enc_1" value="Conv2d(4-&gt;64) + ReLU&lt;br/&gt;初始特征提取" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="rs_enc_box">
+          <mxGeometry x="70" y="40" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rs_enc_2" value="ResBlock × 4&lt;br/&gt;Conv(64-&gt;64)+BN+ReLU&lt;br/&gt;+Conv(64-&gt;64)+BN&lt;br/&gt;+ Skip Connection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff4e6;" vertex="1" parent="rs_enc_box">
+          <mxGeometry x="70" y="100" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rs_enc_3" value="Conv2d(64 -&gt; 3)&lt;br/&gt;输出残差图" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="rs_enc_box">
+          <mxGeometry x="70" y="190" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rs_enc_res" value="&lt;b&gt;残差嵌入&lt;/b&gt;&lt;br/&gt;Residual = Tanh(out) × 0.1&lt;br/&gt;Stego = Cover + Residual&lt;br/&gt;Clamp(-1, 1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;" vertex="1" parent="rs_enc_box">
+          <mxGeometry x="50" y="260" width="240" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- 判别器子框 -->
+        <mxCell id="rs_dis_box" value="判别器 Steganalyzer" style="swimlane;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;startSize=23;" vertex="1" parent="rsgan_container">
+          <mxGeometry x="30" y="620" width="240" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="rs_dis_1" value="Conv(3-&gt;64, s=2) + LeakyReLU&lt;br/&gt;Conv(64-&gt;128, s=2) + BN&lt;br/&gt;AdaptiveAvgPool(1)&lt;br/&gt;Linear(128-&gt;1) + Sigmoid&lt;br/&gt;输出：含密概率" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="rs_dis_box">
+          <mxGeometry x="20" y="40" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- 解码器子框 -->
+        <mxCell id="rs_dec_box" value="解码器 StegoDecoder" style="swimlane;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;startSize=23;" vertex="1" parent="rsgan_container">
+          <mxGeometry x="290" y="620" width="240" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="rs_dec_stack" value="Conv2d(3-&gt;64) + ReLU&lt;br/&gt;&lt;br/&gt;Conv2d(64-&gt;64) + ReLU&lt;br/&gt;&lt;br/&gt;Conv2d(64-&gt;64) + ReLU&lt;br/&gt;&lt;br/&gt;Conv2d(64-&gt;1) + Sigmoid&lt;br/&gt;输出: [N, 1, H, W]&lt;br/&gt;每像素比特概率 0-1&lt;br/&gt;阈值 0.5 截断为 0/1" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="rs_dec_box">
+          <mxGeometry x="20" y="40" width="200" height="340" as="geometry" />
+        </mxCell>
+
+        <!-- === HiDDeN 模型区域 === -->
+        <mxCell id="hidden_container" value="HiDDeN 模型架构 (双分支输入)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#444444;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="640" y="40" width="600" height="1060" as="geometry" />
+        </mxCell>
+
+        <mxCell id="h_input_c" value="&lt;b&gt;Cover Image&lt;/b&gt;&lt;br/&gt;[N, 3, H, W]&lt;br/&gt;RGB 彩色图" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="hidden_container">
+          <mxGeometry x="90" y="60" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h_input_s" value="&lt;b&gt;Secret Image&lt;/b&gt;&lt;br/&gt;[N, 1, H, W]&lt;br/&gt;灰度秘密图" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="hidden_container">
+          <mxGeometry x="360" y="60" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="h_enc_box" value="编码器 HiddenEncoder" style="swimlane;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;startSize=23;" vertex="1" parent="hidden_container">
+          <mxGeometry x="30" y="150" width="540" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="h_br_c" value="Cover Branch&lt;br/&gt;Conv2d(3-&gt;64)+ReLU&lt;br/&gt;Conv2d(64-&gt;64)+ReLU" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="h_enc_box">
+          <mxGeometry x="40" y="40" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h_br_s" value="Secret Branch&lt;br/&gt;Conv2d(1-&gt;64)+ReLU&lt;br/&gt;Conv2d(64-&gt;64)+ReLU" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="h_enc_box">
+          <mxGeometry x="340" y="40" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h_concat" value="Concat 拼接 [N, 128, H, W]" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f5f5f5;" vertex="1" parent="h_enc_box">
+          <mxGeometry x="150" y="120" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="h_fusion" value="Fusion Conv 混合层&lt;br/&gt;Conv×5 + BN + ReLU&lt;br/&gt;128→128→128→64→64→64" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="h_enc_box">
+          <mxGeometry x="150" y="180" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="h_output" value="Output Layer: Conv2d(64-&gt;3) + Tanh" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="h_enc_box">
+          <mxGeometry x="150" y="240" width="240" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="h_noise" value="&lt;b&gt;噪声层 NoiseLayer&lt;/b&gt;&lt;br/&gt;概率触发机制&lt;br/&gt;p&lt;0.5: Identity(无噪声)&lt;br/&gt;p&lt;0.75: 高斯噪声 σ=0.01&lt;br/&gt;p≥0.75: 高斯模糊 k=3, σ=0.5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff9c4;" vertex="1" parent="hidden_container">
+          <mxGeometry x="340" y="450" width="230" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="h_dec_box" value="解码器 HiddenDecoder" style="swimlane;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;startSize=23;" vertex="1" parent="hidden_container">
+          <mxGeometry x="340" y="580" width="230" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="h_dec_stack" value="Conv2d(3-&gt;64) + BN + ReLU&lt;br/&gt;Conv2d(64-&gt;128) + BN + ReLU&lt;br/&gt;Conv2d(128-&gt;128) + BN + ReLU&lt;br/&gt;Conv2d(128-&gt;256) + BN + ReLU&lt;br/&gt;Conv2d(256-&gt;128) + BN + ReLU&lt;br/&gt;Conv2d(128-&gt;64) + BN + ReLU&lt;br/&gt;Conv2d(64-&gt;1) + Tanh&lt;br/&gt;&lt;b&gt;输出: [N, 1, H, W]&lt;/b&gt;&lt;br/&gt;恢复灰度秘密图" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="h_dec_box">
+          <mxGeometry x="15" y="40" width="200" height="380" as="geometry" />
+        </mxCell>
+
+        <mxCell id="h_adv_box" value="判别器 HiddenAdversary" style="swimlane;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;startSize=23;" vertex="1" parent="hidden_container">
+          <mxGeometry x="30" y="450" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="h_adv_1" value="Conv(3-&gt;64) + LeakyReLU&lt;br/&gt;Conv(64-&gt;64, s=2) + BN&lt;br/&gt;Conv(64-&gt;128, s=2) + BN&lt;br/&gt;AdaptiveAvgPool → Flatten&lt;br/&gt;Linear(128 -&gt; 1)&lt;br/&gt;输出：真/假概率" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="h_adv_box">
+          <mxGeometry x="20" y="40" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- 连线 (简化示例，实际在ioDraw中会自动吸附) -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="rs_concat" target="rs_enc_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="h_output" target="h_noise">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
