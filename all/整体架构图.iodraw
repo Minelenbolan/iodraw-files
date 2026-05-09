@@ -1,0 +1,75 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ioDraw.com/3.6.1 Chrome/124.0.6367.49 Electron/30.0.0 Safari/537.36" version="24.7.17" pages="2">
+  <diagram id="thesis-flowchart" name="系统架构图">
+    <mxGraphModel dx="1221" dy="823" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="layer1_bg" value="表现层 (PyQt5 可视化交互界面)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f5f5f5;fontStyle=1;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="1080" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="gui_input" value="&lt;b&gt;输入与参数区&lt;/b&gt;&lt;br/&gt;隐写方式选择 (QComboBox)&lt;br/&gt;数据类型选择 (QComboBox)&lt;br/&gt;秘密信息输入 (QTextEdit/QLineEdit)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer1_bg" vertex="1">
+          <mxGeometry x="20" y="50" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gui_preview" value="&lt;b&gt;原始载体区&lt;/b&gt;&lt;br/&gt;载体图预览 (QLabel)&lt;br/&gt;选择载体图 (QPushButton)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer1_bg" vertex="1">
+          <mxGeometry x="270" y="50" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gui_output" value="&lt;b&gt;输出结果区&lt;/b&gt;&lt;br/&gt;含密图预览 (QLabel)&lt;br/&gt;提取文本显示 (QTextEdit)&lt;br/&gt;提取图像显示 (QLabel)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer1_bg" vertex="1">
+          <mxGeometry x="480" y="50" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gui_metric" value="&lt;b&gt;评估指标面板&lt;/b&gt;&lt;br/&gt;PSNR / SSIM&lt;br/&gt;Accuracy / BER" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer1_bg" vertex="1">
+          <mxGeometry x="730" y="50" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gui_panel" value="&lt;b&gt;算法说明面板&lt;/b&gt;&lt;br/&gt;QTextEdit ReadOnly" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer1_bg" vertex="1">
+          <mxGeometry x="920" y="50" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="layer2_bg" value="业务逻辑层 (Python 控制调度)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f9f7ed;fontStyle=1;strokeColor=#ae9043;" parent="1" vertex="1">
+          <mxGeometry x="40" y="270" width="1080" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="logic_preprocess" value="&lt;b&gt;图像加载与预处理&lt;/b&gt;&lt;br/&gt;PIL.Image / QPixmap&lt;br/&gt;(cover_path / secret_path)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer2_bg" vertex="1">
+          <mxGeometry x="20" y="60" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="logic_router" value="&lt;b&gt;算法路由调度器&lt;/b&gt;&lt;br/&gt;on_embed() / on_extract()&lt;br/&gt;根据 method_combo 分发" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;rounded=0;" parent="layer2_bg" vertex="1">
+          <mxGeometry x="350" y="40" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="logic_metrics" value="&lt;b&gt;评价指标计算引擎&lt;/b&gt;&lt;br/&gt;calc_image_metrics()&lt;br/&gt;calc_text_metrics()&lt;br/&gt;skimage.metrics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer2_bg" vertex="1">
+          <mxGeometry x="730" y="65" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="layer3_bg" value="算法引擎层 (核心隐写算法库)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f0f3ff;fontStyle=1;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="40" y="540" width="760" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="algo_deep" value="&lt;b&gt;深度学习模型库 (PyTorch)&lt;/b&gt;&lt;br/&gt;HiDDeN 模型 (Encoder/Decoder)&lt;br/&gt;RS-GAN 模型 (.encode/.decode)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer3_bg" vertex="1">
+          <mxGeometry x="30" y="50" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="algo_trad" value="&lt;b&gt;传统算法模块 (Py-OpenCV)&lt;/b&gt;&lt;br/&gt;LSB 空域隐写 (LSB_word.LSBstego)&lt;br/&gt;DWT-QIM 频域隐写 (embed/extract)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;" parent="layer3_bg" vertex="1">
+          <mxGeometry x="400" y="50" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="layer4_bg" value="数据持久层 (本地系统)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#fff2cc;fontStyle=1;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="840" y="540" width="280" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="data_files" value="&lt;b&gt;素材与结果 (.png/.jpg/.txt)&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;" parent="layer4_bg" vertex="1">
+          <mxGeometry x="30" y="50" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="data_weights" value="&lt;b&gt;预训练权重 (.pth)&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;" parent="layer4_bg" vertex="1">
+          <mxGeometry x="150" y="50" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="gui_input" target="logic_router" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="logic_router" target="layer3_bg" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="layer3_bg" target="data_files" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="YuSp0KD20vtPPBsdyMOV" name="第 2 页">
+    <mxGraphModel dx="1221" dy="823" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
